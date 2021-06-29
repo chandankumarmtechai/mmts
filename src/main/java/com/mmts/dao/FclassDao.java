@@ -15,10 +15,22 @@ public class FclassDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    public FclassDao()
+    {}
+
+    public FclassDao(JdbcTemplate jdbcTemplate)
+    { this.jdbcTemplate = jdbcTemplate; }
+
     public List<Fclass> findAll()
     {
         return jdbcTemplate.query("select * from class", new BeanPropertyRowMapper<Fclass>(Fclass.class));
 
+    }
+
+    public Fclass findByCname(String cname)
+    {
+        return jdbcTemplate.queryForObject("select * from class where name = ?", new Object[] {cname},
+                new BeanPropertyRowMapper<Fclass>(Fclass.class));
     }
 
     public int insert(Fclass fclass)

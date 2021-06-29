@@ -1,5 +1,7 @@
 package com.mmts.modal;
 
+import java.time.LocalDateTime;
+
 public class BookTicket {
     private String pnr;
     private String s_code;
@@ -8,6 +10,18 @@ public class BookTicket {
     private int noadult;
     private int nochild;
     private String cname;
+    private LocalDateTime dtime;
+
+    public BookTicket()
+    {}
+
+    public LocalDateTime getDtime() {
+        return dtime;
+    }
+
+    public void setDtime(LocalDateTime dtime) {
+        this.dtime = dtime;
+    }
 
     public double getFair() {
         return fair;
