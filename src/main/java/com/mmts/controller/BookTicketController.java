@@ -1,6 +1,7 @@
 package com.mmts.controller;
 
 import com.mmts.algorithm.FairCalculated;
+import com.mmts.algorithm.PnrGenerated;
 import com.mmts.dao.BooKTicketDao;
 import com.mmts.modal.BookTicket;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 public class BookTicketController {
 
@@ -16,6 +18,8 @@ public class BookTicketController {
     BooKTicketDao booKTicketDao;
     @Autowired
     FairCalculated fairCalculated;
+    @Autowired
+    PnrGenerated pnrGenerated;
 
     @RequestMapping("/booktickets")
     public List<BookTicket> getAllBookTickets()
@@ -30,14 +34,15 @@ public class BookTicketController {
     }
 
     @RequestMapping(method= RequestMethod.POST, value="/booktickets")
-    public int addBookTicket(@RequestBody BookTicket bookTicket)
+    public BookTicket addBookTicket(@RequestBody BookTicket bookTicket)
     {
         bookTicket.setFair(fairCalculated.calculateFair(bookTicket.getS_code(),bookTicket.getD_code(),
         bookTicket.getNoadult(),bookTicket.getCname()));
 
         bookTicket.setDtime(LocalDateTime.now());
-        bookTicket.setPnr("123");
+        bookTicket.setPnr(pnrGenerated.generatePnr(bookTicket.getDtime().toString()));
 
-        return booKTicketDao.insert(bookTicket);
+        booKTicketDao.insert(bookTicket);
+        return bookTicket;
     }
 }
